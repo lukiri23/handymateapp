@@ -4,11 +4,9 @@ const mysql = require('mysql2');
 const cors = require('cors');
 require('dotenv').config();
 
-
 const app = express();
 app.use(cors());
 app.use(express.json());
-
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -16,8 +14,6 @@ const db = mysql.createConnection({
   password: process.env.DB_PASS,
   database: process.env.DB_DATABASE,
 });
-
-
 db.connect(err => {
   if (err) {
     console.error('Povezava z bazo ni uspela:', err);
@@ -25,13 +21,12 @@ db.connect(err => {
     console.log('Povezano z MySQL bazo!');
   }
 });
-
-
 app.get('/', (req, res) => {
   res.send('Strežnik deluje!');
 });
-
-
 app.listen(3001, () => {
   console.log('Strežnik teče na http://localhost:3001');
 });
+
+const authRoutes = require('./routes/auth');
+app.use('/api', authRoutes);
