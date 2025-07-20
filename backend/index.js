@@ -30,3 +30,7 @@ app.listen(3001, () => {
 
 const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
+
+const tezaveRoutes = require('./routes/tezave');
+app.use('/api/tezave', tezaveRoutes);
+
