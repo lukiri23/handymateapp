@@ -27,4 +27,16 @@ router.post('/dodaj', (req, res) => {
   });
 });
 
+router.get('/vse', (req, res) => {
+  const query = 'SELECT * FROM tezave';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Napaka pri pridobivanju težav:', err);
+      return res.status(500).json({ message: 'Napaka pri pridobivanju težav' });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
 module.exports = router;
