@@ -34,3 +34,6 @@ app.use('/api', authRoutes);
 const tezaveRoutes = require('./routes/tezave');
 app.use('/api/tezave', tezaveRoutes);
 
+const mojstriRoutes = require('./routes/mojstri');
+app.use('/api/mojstri', mojstriRoutes);
+
