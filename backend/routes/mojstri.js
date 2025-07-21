@@ -23,4 +23,16 @@ router.post('/registracija', (req, res) => {
   });
 });
 
+router.get('/vsi', (req, res) => {
+  const query = 'SELECT * FROM mojstri';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Napaka pri pridobivanju mojstrov:', err);
+      return res.status(500).json({ message: 'Napaka pri pridobivanju mojstrov' });
+    }
+    res.status(200).json(results);
+  });
+});
+
+
 module.exports = router;
