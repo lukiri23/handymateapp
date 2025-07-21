@@ -4,6 +4,8 @@ import Registracija from './pages/Registracija';
 import DodajTezavo from './pages/DodajTezavo';
 import Domov from './pages/Domov';
 import Tezave from './pages/Tezave';
+import Mojstri from './pages/Mojstri';
+
 
 
 function App() {
@@ -13,7 +15,10 @@ function App() {
         <Link to="/">Domov</Link> |{" "}
         <Link to="/registracija">Registracija</Link> |{" "}
         <Link to="/dodaj-tezavo">Dodaj težavo</Link> |{" "}
-        <Link to="/tezave">Težave</Link>
+        <Link to="/tezave">Težave</Link> |{" "}
+        <Link to="/mojstri">Mojstri</Link>
+
+        
 
       </nav>
       <hr />
@@ -22,6 +27,8 @@ function App() {
         <Route path="/registracija" element={<Registracija />} />
         <Route path="/dodaj-tezavo" element={<DodajTezavo />} />
         <Route path="/tezave" element={<Tezave />} />
+        <Route path="/mojstri" element={<Mojstri />} />
+
 
       </Routes>
     </Router>
