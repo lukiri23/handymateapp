@@ -1,10 +1,7 @@
-
-
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
 require('dotenv').config();
-
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -13,21 +10,40 @@ const db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 
-
 router.post('/register', (req, res) => {
-  const { ime, priimek, gsm } = req.body;
+  const { ime, priimek, gsm, email, geslo, tip_racuna } = req.body;
 
-  const query = 'INSERT INTO uporabniki (ime, priimek, gsm) VALUES (?, ?, ?)';
-  db.query(query, [ime, priimek, gsm], (err, result) => {
+  const insertUporabnikQuery = `
+    INSERT INTO uporabniki (ime, priimek, gsm, email, geslo, tip_racuna)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(insertUporabnikQuery, [ime, priimek, gsm, email, geslo, tip_racuna], (err, result) => {
     if (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        return res.status(400).json({ message: 'Email je že v uporabi.' });
+      }
       console.error('Napaka pri registraciji:', err);
-      return res.status(500).json({ message: 'Napaka pri registraciji' });
+      return res.status(500).json({ message: 'Napaka pri registraciji.' });
     }
-    res.status(200).json({ message: 'Uporabnik uspešno registriran!' });
+
+    
+    if (tip_racuna === 'mojster') {
+      const insertMojsterQuery = `
+        INSERT INTO mojstri (ime, priimek, gsm, strokovnost)
+        VALUES (?, ?, ?, 'ni določeno')
+      `;
+      db.query(insertMojsterQuery, [ime, priimek, gsm], (err2) => {
+        if (err2) {
+          console.error('Napaka pri vnosu mojstra:', err2);
+          return res.status(500).json({ message: 'Napaka pri shranjevanju mojstra.' });
+        }
+        return res.status(200).json({ message: 'Registracija uspešna kot mojster!' });
+      });
+    } else {
+      return res.status(200).json({ message: 'Registracija uspešna kot uporabnik!' });
+    }
   });
 });
 
 module.exports = router;
-
-
-

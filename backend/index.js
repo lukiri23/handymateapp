@@ -5,7 +5,11 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST']
+}));
+
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -36,4 +40,8 @@ app.use('/api/tezave', tezaveRoutes);
 
 const mojstriRoutes = require('./routes/mojstri');
 app.use('/api/mojstri', mojstriRoutes);
+
+
+
+
 

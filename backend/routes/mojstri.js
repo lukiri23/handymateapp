@@ -10,29 +10,16 @@ const db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 
-router.post('/registracija', (req, res) => {
-  const { ime, priimek, gsm, strokovnost } = req.body;
 
-  const query = 'INSERT INTO mojstri (ime, priimek, gsm, strokovnost) VALUES (?, ?, ?, ?)';
-  db.query(query, [ime, priimek, gsm, strokovnost], (err, result) => {
+router.get('/', (req, res) => {
+  const sql = 'SELECT ime, priimek, gsm, email FROM uporabniki WHERE tip_racuna = "mojster"';
+  db.query(sql, (err, result) => {
     if (err) {
-      console.error('Napaka pri registraciji mojstra:', err);
-      return res.status(500).json({ message: 'Napaka pri registraciji mojstra' });
+      console.error('Napaka pri poizvedbi za mojstre:', err);
+      return res.status(500).json({ error: 'Napaka pri pridobivanju mojstrov' });
     }
-    res.status(200).json({ message: 'Mojster uspešno registriran!' });
+    res.json(result);
   });
 });
-
-router.get('/vsi', (req, res) => {
-  const query = 'SELECT * FROM mojstri';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Napaka pri pridobivanju mojstrov:', err);
-      return res.status(500).json({ message: 'Napaka pri pridobivanju mojstrov' });
-    }
-    res.status(200).json(results);
-  });
-});
-
 
 module.exports = router;
