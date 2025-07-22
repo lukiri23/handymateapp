@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -5,7 +6,7 @@ function Mojstri() {
   const [mojstri, setMojstri] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/mojstri')
+    axios.get('http://localhost:3001/api/mojstri')
       .then(res => setMojstri(res.data))
       .catch(err => console.error('Napaka pri pridobivanju mojstrov:', err));
   }, []);
@@ -16,7 +17,7 @@ function Mojstri() {
       <ul>
         {mojstri.map((mojster, index) => (
           <li key={index}>
-            {mojster.ime} {mojster.priimek} – {mojster.email}, GSM: {mojster.gsm}
+            {mojster.ime} {mojster.priimek} – {mojster.strokovnosti?.join(', ') || 'Brez strokovnosti'}, GSM: {mojster.gsm}, Email: {mojster.email}
           </li>
         ))}
       </ul>

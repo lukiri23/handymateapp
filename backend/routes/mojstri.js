@@ -12,7 +12,7 @@ const db = mysql.createConnection({
 
 
 router.get('/', (req, res) => {
-  const sql = 'SELECT ime, priimek, gsm, email FROM uporabniki WHERE tip_racuna = "mojster"';
+  const sql = 'SELECT ime, priimek, gsm, email, strokovnosti FROM uporabniki WHERE tip_racuna = "mojster"';
   db.query(sql, (err, result) => {
     if (err) {
       console.error('Napaka pri poizvedbi za mojstre:', err);

@@ -11,38 +11,19 @@ const db = mysql.createConnection({
 });
 
 router.post('/register', (req, res) => {
-  const { ime, priimek, gsm, email, geslo, tip_racuna } = req.body;
+  const { ime, priimek, gsm, email, geslo, tip_racuna, strokovnosti } = req.body;
+  const sql = 'INSERT INTO uporabniki (ime, priimek, gsm, email, geslo, tip_racuna, strokovnosti) VALUES (?, ?, ?, ?, ?, ?, ?)';
 
-  const insertUporabnikQuery = `
-    INSERT INTO uporabniki (ime, priimek, gsm, email, geslo, tip_racuna)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `;
-
-  db.query(insertUporabnikQuery, [ime, priimek, gsm, email, geslo, tip_racuna], (err, result) => {
+  db.query(sql, [ime, priimek, gsm, email, geslo, tip_racuna, JSON.stringify(strokovnosti)], (err, result) => {
     if (err) {
       if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(400).json({ message: 'Email je že v uporabi.' });
+        return res.status(409).send('Email že obstaja');
       }
       console.error('Napaka pri registraciji:', err);
-      return res.status(500).json({ message: 'Napaka pri registraciji.' });
+      return res.status(500).send('Napaka pri registraciji.');
     }
 
-    
-    if (tip_racuna === 'mojster') {
-      const insertMojsterQuery = `
-        INSERT INTO mojstri (ime, priimek, gsm, strokovnost)
-        VALUES (?, ?, ?, 'ni določeno')
-      `;
-      db.query(insertMojsterQuery, [ime, priimek, gsm], (err2) => {
-        if (err2) {
-          console.error('Napaka pri vnosu mojstra:', err2);
-          return res.status(500).json({ message: 'Napaka pri shranjevanju mojstra.' });
-        }
-        return res.status(200).json({ message: 'Registracija uspešna kot mojster!' });
-      });
-    } else {
-      return res.status(200).json({ message: 'Registracija uspešna kot uporabnik!' });
-    }
+    res.status(200).send('Registracija uspešna');
   });
 });
 
