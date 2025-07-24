@@ -26,5 +26,25 @@ router.post('/register', (req, res) => {
     res.status(200).send('Registracija uspešna');
   });
 });
+router.post('/login', (req, res) => {
+  const { email, geslo } = req.body;
+
+  const sql = 'SELECT id, ime, priimek, tip_racuna FROM uporabniki WHERE email = ? AND geslo = ?';
+  db.query(sql, [email, geslo], (err, result) => {
+    if (err) {
+      console.error('Napaka pri poizvedbi za login:', err);
+      return res.status(500).send('Napaka na strežniku.');
+    }
+
+    if (result.length === 0) {
+      return res.status(401).send('Napačen email ali geslo.');
+    }
+
+    
+    const user = result[0];
+    res.json(user);
+  });
+});
+
 
 module.exports = router;

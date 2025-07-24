@@ -1,18 +1,31 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Domov() {
+  const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
+  if (user) {
+    return (
+      <div>
+        <h2>Dobrodošel nazaj, {user.ime} {user.priimek}!</h2>
+        <p>Prijavljen si kot: <strong>{user.tip_racuna}</strong></p>
+        <button onClick={handleLogout}>Odjava</button>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+    <div>
       <h2>Dobrodošli v aplikaciji HandyMate</h2>
       <p>Izberi, kdo si:</p>
-      <button onClick={() => navigate('/login-uporabnik')} style={{ padding: '10px 20px', margin: '10px' }}>
-        Sem uporabnik
-      </button>
-      <button onClick={() => navigate('/login-mojster')} style={{ padding: '10px 20px', margin: '10px' }}>
-        Sem mojster
-      </button>
+      <button onClick={() => navigate('/register')}>Sem uporabnik</button>
+      <button onClick={() => navigate('/register')}>Sem mojster</button>
     </div>
   );
 }
