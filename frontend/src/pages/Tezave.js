@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Tezave() {
   const [tezave, setTezave] = useState([]);
@@ -17,11 +18,14 @@ function Tezave() {
         <p>Ni dodanih težav.</p>
       ) : (
         <ul>
-          {tezave.map(t => (
-            <li key={t.id}>
-              <strong>{t.kategorija}</strong>: {t.opis} ({t.cena} €)
-            </li>
-          ))}
+          {tezave.map(tezava => (
+  <li key={tezava.id}>
+    <Link to={`/tezave/${tezava.id}`}>
+      <strong>{tezava.kategorija}</strong>
+    </Link>: {tezava.opis} ({tezava.cena} €)
+  </li>
+))}
+
         </ul>
       )}
     </div>

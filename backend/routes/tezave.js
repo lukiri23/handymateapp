@@ -1,10 +1,7 @@
-
-
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
 require('dotenv').config();
-
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -12,7 +9,6 @@ const db = mysql.createConnection({
   password: process.env.DB_PASS,
   database: process.env.DB_DATABASE,
 });
-
 
 router.post('/dodaj', (req, res) => {
   const { opis, kategorija, cena } = req.body;
@@ -38,5 +34,19 @@ router.get('/vse', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM tezave WHERE id = ?';
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Napaka pri pridobivanju težave:', err);
+      return res.status(500).json({ message: 'Napaka pri pridobivanju težave' });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Težava ni bila najdena' });
+    }
+    res.status(200).json(results[0]);
+  });
+});
 
 module.exports = router;

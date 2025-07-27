@@ -7,8 +7,8 @@ import Mojstri from './pages/Mojstri';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
-import PrivateRoute from './components/PrivateRoute'; 
-
+import PrivateRoute from './components/PrivateRoute';
+import TezavaPodrobnosti from './pages/TezavaPodrobnosti';
 function App() {
   return (
     <Router>
@@ -17,8 +17,8 @@ function App() {
         <Route path="/" element={<Domov />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        
-        {}
+        <Route path="/tezave/:id" element={<TezavaPodrobnosti />} />
+
         <Route path="/dodaj-tezavo" element={
           <PrivateRoute><DodajTezavo /></PrivateRoute>
         } />
@@ -28,9 +28,11 @@ function App() {
         <Route path="/mojstri" element={
           <PrivateRoute><Mojstri /></PrivateRoute>
         } />
+        <Route path="/tezave/:id" element={
+          <PrivateRoute><TezavaPodrobnosti /></PrivateRoute>
+        } />
       </Routes>
     </Router>
   );
 }
-
 export default App;
