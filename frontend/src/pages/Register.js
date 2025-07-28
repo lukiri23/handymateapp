@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [ime, setIme] = useState('');
@@ -10,6 +11,7 @@ function Register() {
   const [tipRacuna, setTipRacuna] = useState('uporabnik');
   const [strokovnosti, setStrokovnosti] = useState([]);
   const [sporocilo, setSporocilo] = useState('');
+  const navigate = useNavigate();
 
   const vseStrokovnosti = ['Vodovodar', 'Električar', 'Zidar', 'Slikopleskar'];
 
@@ -24,10 +26,9 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
+      
       await axios.post('http://localhost:3001/api/register', {
-
         ime,
         priimek,
         gsm,
@@ -36,16 +37,27 @@ function Register() {
         tip_racuna: tipRacuna,
         strokovnosti: tipRacuna === 'mojster' ? strokovnosti : null
       });
-      setSporocilo('Uspešna registracija!');
-    } catch (err) {
-  console.log("FULL ERROR:", err); 
-  console.log("RESPONSE ERROR:", err.response?.data); 
 
-  if (err.response?.status === 409) {
-    setSporocilo('Email je že v uporabi.');
-  } else {
-    setSporocilo('Napaka pri registraciji.');
-  }
+      
+      const loginResponse = await axios.post('http://localhost:3001/api/login', {
+        email,
+        geslo
+      });
+
+      
+      localStorage.setItem('user', JSON.stringify(loginResponse.data));
+
+      
+      navigate('/');
+    } catch (err) {
+      console.log("FULL ERROR:", err);
+      console.log("RESPONSE ERROR:", err.response?.data);
+
+      if (err.response?.status === 409) {
+        setSporocilo('Email je že v uporabi.');
+      } else {
+        setSporocilo('Napaka pri registraciji!');
+      }
     }
   };
 
@@ -53,22 +65,27 @@ function Register() {
     <div>
       <h2>Registracija</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Ime" value={ime} onChange={(e) => setIme(e.target.value)} /><br />
-        <input type="text" placeholder="Priimek" value={priimek} onChange={(e) => setPriimek(e.target.value)} /><br />
-        <input type="text" placeholder="GSM" value={gsm} onChange={(e) => setGsm(e.target.value)} /><br />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
-        <input type="password" placeholder="Geslo" value={geslo} onChange={(e) => setGeslo(e.target.value)} /><br />
+        <div>
+          <input type="text" placeholder="Ime" value={ime} onChange={(e) => setIme(e.target.value)} /><br />
+          <input type="text" placeholder="Priimek" value={priimek} onChange={(e) => setPriimek(e.target.value)} /><br />
+          <input type="text" placeholder="GSM" value={gsm} onChange={(e) => setGsm(e.target.value)} /><br />
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /><br />
+          <input type="password" placeholder="Geslo" value={geslo} onChange={(e) => setGeslo(e.target.value)} /><br />
+        </div>
 
-        <select value={tipRacuna} onChange={(e) => setTipRacuna(e.target.value)}>
-          <option value="uporabnik">Uporabnik</option>
-          <option value="mojster">Mojster</option>
-        </select><br /><br />
+        <div>
+          <select value={tipRacuna} onChange={(e) => setTipRacuna(e.target.value)}>
+            <option value="uporabnik">Uporabnik</option>
+            <option value="mojster">Mojster</option>
+          </select>
+        </div>
+        <br />
 
         {tipRacuna === 'mojster' && (
           <div>
             <p>Izberi strokovnosti:</p>
             {vseStrokovnosti.map((s, i) => (
-              <label key={i}>
+              <label key={i} style={{ display: 'block' }}>
                 <input
                   type="checkbox"
                   value={s}
