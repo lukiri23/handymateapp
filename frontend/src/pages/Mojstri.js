@@ -1,6 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Mojstri() {
   const [mojstri, setMojstri] = useState([]);
@@ -17,7 +17,8 @@ function Mojstri() {
       <ul>
         {mojstri.map((mojster, index) => (
           <li key={index}>
-            {mojster.ime} {mojster.priimek} – {mojster.strokovnosti?.join(', ') || 'Brez strokovnosti'}, GSM: {mojster.gsm}, Email: {mojster.email}
+            <strong>{mojster.ime} {mojster.priimek}</strong> {}
+            – {mojster.strokovnosti?.join(', ') || 'Brez strokovnosti'}, GSM: {mojster.gsm}, Email: {mojster.email}
           </li>
         ))}
       </ul>
