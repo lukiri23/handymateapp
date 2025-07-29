@@ -94,6 +94,13 @@ button {
   transition: background-color 0.2s ease-in-out;
 }
 
+.center-btn{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
 li {
   margin-bottom: 10px;
   white-space: nowrap;	

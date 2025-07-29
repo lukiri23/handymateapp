@@ -24,7 +24,7 @@ function DodajTezavo() {
         <input type="text" placeholder="Opis" value={opis} onChange={(e) => setOpis(e.target.value)} /><br />
         <input type="text" placeholder="Kategorija" value={kategorija} onChange={(e) => setKategorija(e.target.value)} /><br />
         <input type="number" placeholder="Cena" value={cena} onChange={(e) => setCena(e.target.value)} /><br />
-        <button type="submit">Dodaj</button>
+        <button className='center-btn' type="submit">Dodaj</button>
       </form>
       <p>{message}</p>
     </div>
