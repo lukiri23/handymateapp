@@ -11,10 +11,10 @@ const db = mysql.createConnection({
 });
 
 router.post('/dodaj', (req, res) => {
-  const { opis, kategorija, cena } = req.body;
+  const { opis, kategorija, cena, uporabnik_id } = req.body;
 
-  const query = 'INSERT INTO tezave (opis, kategorija, cena) VALUES (?, ?, ?)';
-  db.query(query, [opis, kategorija, cena], (err, result) => {
+  const query = 'INSERT INTO tezave (opis, kategorija, cena, uporabnik_id) VALUES (?, ?, ?, ?)';
+  db.query(query, [opis, kategorija, cena, uporabnik_id], (err, result) => {
     if (err) {
       console.error('Napaka pri dodajanju težave:', err);
       return res.status(500).json({ message: 'Napaka pri dodajanju težave' });

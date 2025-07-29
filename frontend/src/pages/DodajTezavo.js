@@ -8,10 +8,12 @@ function DodajTezavo() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const user = JSON.parse(localStorage.getItem('user'));
+    const uporabnik_id = user?.id;
     const res = await fetch('http://localhost:3001/api/tezave/dodaj', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ opis, kategorija, cena })
+      body: JSON.stringify({ opis, kategorija, cena, uporabnik_id })
     });
     const data = await res.json();
     setMessage(data.message || 'Napaka pri dodajanju težave.');
