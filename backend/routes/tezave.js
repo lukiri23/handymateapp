@@ -41,11 +41,13 @@ router.get('/:id', (req, res) => {
   const query = `
     SELECT t.*, 
            u.ime AS uporabnik_ime,
+           u.priimek AS uporabnik_priimek,
            u.gsm AS uporabnik_gsm,
            u.email AS uporabnik_email
     FROM tezave t
     JOIN uporabniki u ON t.uporabnik_id = u.id
     WHERE t.id = ?`;
+    
   db.query(query, [id], (err, results) => {
     if (err) {
       console.error('Napaka pri pridobivanju težave:', err);
@@ -57,4 +59,5 @@ router.get('/:id', (req, res) => {
     res.status(200).json(results[0]);  
   });
 });
+
 module.exports = router;
