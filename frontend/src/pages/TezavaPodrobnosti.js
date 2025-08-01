@@ -17,12 +17,22 @@ function TezavaPodrobnosti() {
   }
 
   return (
-    <div>
-      <h2>{tezava.kategorija.toUpperCase()}</h2>
-      <p>Opis: {tezava.opis}</p>
-      <p>Cena: ({tezava.cena} €)</p>
-    </div>
-  );
-}
+  <div>
+    <h2>Podrobnosti težave</h2>
+    <p><strong>Opis:</strong> {tezava.opis}</p>
+    <p><strong>Kategorija:</strong> {tezava.kategorija}</p>
+    <p><strong>Cena:</strong> {tezava.cena} €</p>
+    <p><strong>Datum težave:</strong> {new Date(tezava.datum).toLocaleString('sl-SI')}</p>
 
+    <h3>Podatki o uporabniku</h3>
+    <div className="user-details">
+      <p><strong>Ime:</strong> {tezava.uporabnik_ime}</p>
+      <p><strong>GSM:</strong> {tezava.uporabnik_gsm}</p>
+      <p><strong>Email:</strong> {tezava.uporabnik_email}</p>
+    </div>
+  </div>
+);
+
+
+}
 export default TezavaPodrobnosti;
