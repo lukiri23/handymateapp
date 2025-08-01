@@ -10,10 +10,14 @@ const db = mysql.createConnection({
   database: process.env.DB_DATABASE,
 });
 router.post('/dodaj', (req, res) => {
-  const { opis, kategorija, cena } = req.body;
+  const { opis, kategorija, cena, uporabnik_id } = req.body;
 
-  const query = 'INSERT INTO tezave (opis, kategorija, cena) VALUES (?, ?, ?)';
-  db.query(query, [opis, kategorija, cena], (err, result) => {
+  if (!opis || !kategorija || !cena || !uporabnik_id) {
+    return res.status(400).json({ message: 'Vsi podatki morajo biti izpolnjeni!' });
+  }
+
+  const query = "INSERT INTO tezave (opis, kategorija, cena, uporabnik_id, datum) VALUES (?, ?, ?, ?, NOW())";
+  db.query(query, [opis, kategorija, cena, uporabnik_id], (err, result) => {
     if (err) {
       console.error('Napaka pri dodajanju težave:', err);
       return res.status(500).json({ message: 'Napaka pri dodajanju težave' });
@@ -21,6 +25,7 @@ router.post('/dodaj', (req, res) => {
     res.status(200).json({ message: 'Težava uspešno dodana!' });
   });
 });
+
 router.get('/vse', (req, res) => {
   const query = 'SELECT * FROM tezave';
   db.query(query, (err, results) => {
