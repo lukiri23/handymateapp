@@ -9,7 +9,7 @@ function DodajTezavo() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Pridobi prijavljenega uporabnika iz localStorage
+    
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (!user || !user.id) {

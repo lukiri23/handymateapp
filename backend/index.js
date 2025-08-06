@@ -1,47 +1,42 @@
-
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
+const mysql = require('mysql2');
 require('dotenv').config();
 
 const app = express();
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST']
-}));
-
+app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
+
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_DATABASE,
 });
-db.connect(err => {
-  if (err) {
-    console.error('Povezava z bazo ni uspela:', err);
-  } else {
-    console.log('Povezano z MySQL bazo!');
-  }
-});
-app.get('/', (req, res) => {
-  res.send('Strežnik deluje!');
-});
-app.listen(3001, () => {
-  console.log('Strežnik teče na http://localhost:3001');
+
+
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Backend deluje in je povezan z bazo!' });
 });
 
-const authRoutes = require('./routes/auth');
-app.use('/api', authRoutes);
 
-const tezaveRoutes = require('./routes/tezave');
-app.use('/api/tezave', tezaveRoutes);
+app.post('/api/login', (req, res) => {
+  const { email, geslo } = req.body;
 
-const mojstriRoutes = require('./routes/mojstri');
-app.use('/api/mojstri', mojstriRoutes);
+  const query = 'SELECT * FROM Uporabnik WHERE email = ? AND geslo = ?';
+  db.query(query, [email, geslo], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Napaka na strežniku' });
+    }
+    if (results.length > 0) {
+      res.json({ message: 'Prijava uspešna!', user: results[0] });
+    } else {
+      res.status(401).json({ message: 'Napačen email ali geslo' });
+    }
+  });
+});
 
 
-
-
-
+module.exports = app;

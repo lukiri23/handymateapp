@@ -30,8 +30,8 @@ function Login() {
   return (
     <div>
       <h2>Prijava</h2>
-      <form onSubmit={handleSubmit}>
-        <input
+      <form  onSubmit={handleSubmit}>
+        <input 
           type="email"
           placeholder="Email"
           value={email}
@@ -45,7 +45,7 @@ function Login() {
           onChange={(e) => setGeslo(e.target.value)}
           required
         /><br />
-        <button type="submit">Prijavi se</button>
+        <button  type="submit">Prijavi se</button>
       </form>
       <p>{sporocilo}</p>
     </div>

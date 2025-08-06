@@ -99,7 +99,7 @@ function Register() {
         )}
 
         <br />
-        <button type="submit">Registriraj se</button>
+        <button className="center-btn" type="submit">Registriraj se</button>
       </form>
       <p>{sporocilo}</p>
     </div>
