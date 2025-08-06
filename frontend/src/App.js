@@ -1,7 +1,9 @@
+// Glavna komponenta aplikacije HandyMate
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
+// Uvozimo strani aplikacije
 import Domov from './pages/Domov';
 import Tezave from './pages/Tezave';
 import DodajTezavo from './pages/DodajTezavo';
@@ -11,16 +13,23 @@ import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import TezavaPodrobnosti from './pages/TezavaPodrobnosti';
+
+// Glavna funkcijska komponenta aplikacije
 function App() {
   return (
     <Router>
+      {/* Navigacijska vrstica - vedno prisotna */}
       <Navbar />
+      
+      {/* Definiramo poti aplikacije */}
       <Routes>
+        {/* Javne poti - dostopne vsem */}
         <Route path="/" element={<Domov />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/tezave/:id" element={<TezavaPodrobnosti />} />
 
+        {/* Zasebne poti - dostopne le prijavljenim uporabnikom */}
         <Route path="/dodaj-tezavo" element={
           <PrivateRoute><DodajTezavo /></PrivateRoute>
         } />
@@ -37,4 +46,6 @@ function App() {
     </Router>
   );
 }
+
+// Izvozimo komponento za uporabo
 export default App;
