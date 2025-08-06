@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 function LoginMojster() {
   const [gsm, setGsm] = useState('');
@@ -8,7 +9,7 @@ function LoginMojster() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('http://localhost:3001/api/mojstri/login', {
+    const res = await fetch(`${config.API_BASE_URL}/api/mojstri/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ gsm })

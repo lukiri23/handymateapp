@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import config from '../config';
 
 function Mojstri() {
   const [mojstri, setMojstri] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/mojstri')
+    axios.get(`${config.API_BASE_URL}/api/mojstri`)
       .then(res => setMojstri(res.data))
       .catch(err => console.error('Napaka pri pridobivanju mojstrov:', err));
   }, []);

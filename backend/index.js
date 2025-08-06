@@ -4,7 +4,18 @@ const mysql = require('mysql2');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+// Configure CORS for production
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://handymateapp-main.vercel.app', 'https://your-custom-domain.com'] // Add your actual Vercel domain
+    : ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 
@@ -16,26 +27,18 @@ const db = mysql.createPool({
 });
 
 
+// Import routes
+const authRoutes = require('./routes/auth');
+const mojstriRoutes = require('./routes/mojstri');
+const tezaveRoutes = require('./routes/tezave');
+
+// Use routes
+app.use('/api', authRoutes);
+app.use('/api/mojstri', mojstriRoutes);
+app.use('/api/tezave', tezaveRoutes);
+
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend deluje in je povezan z bazo!' });
-});
-
-
-app.post('/api/login', (req, res) => {
-  const { email, geslo } = req.body;
-
-  const query = 'SELECT * FROM Uporabnik WHERE email = ? AND geslo = ?';
-  db.query(query, [email, geslo], (err, results) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Napaka na strežniku' });
-    }
-    if (results.length > 0) {
-      res.json({ message: 'Prijava uspešna!', user: results[0] });
-    } else {
-      res.status(401).json({ message: 'Napačen email ali geslo' });
-    }
-  });
 });
 
 

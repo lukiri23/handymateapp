@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import config from '../config';
 
 function Register() {
   const [ime, setIme] = useState('');
@@ -28,7 +29,7 @@ function Register() {
     e.preventDefault();
     try {
       
-      await axios.post('http://localhost:3001/api/register', {
+      await axios.post(`${config.API_BASE_URL}/api/register`, {
         ime,
         priimek,
         gsm,
@@ -39,7 +40,7 @@ function Register() {
       });
 
       
-      const loginResponse = await axios.post('http://localhost:3001/api/login', {
+      const loginResponse = await axios.post(`${config.API_BASE_URL}/api/login`, {
         email,
         geslo
       });

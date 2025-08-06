@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import config from '../config';
 
 function DodajTezavo() {
   const [opis, setOpis] = useState('');
@@ -18,7 +19,7 @@ function DodajTezavo() {
     }
 
     try {
-      const res = await fetch('http://localhost:3001/api/tezave/dodaj', {
+      const res = await fetch(`${config.API_BASE_URL}/api/tezave/dodaj`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ opis, kategorija, cena, uporabnik_id: user.id }),

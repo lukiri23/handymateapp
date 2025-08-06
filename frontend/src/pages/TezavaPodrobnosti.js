@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import config from '../config';
 
 function TezavaPodrobnosti() {
   const { id } = useParams();
   const [tezava, setTezava] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3001/api/tezave/${id}`)
+    fetch(`${config.API_BASE_URL}/api/tezave/${id}`)
       .then((res) => res.json())
       .then((data) => setTezava(data))
       .catch((err) => console.error('Napaka pri pridobivanju podrobnosti:', err));

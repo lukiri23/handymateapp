@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import config from '../config';
 
 function SeznamTezav() {
   const [tezave, setTezave] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/tezave/vse')
+    fetch(`${config.API_BASE_URL}/api/tezave/vse`)
       .then((res) => res.json())
       .then((data) => setTezave(data))
       .catch((err) => console.error('Napaka pri pridobivanju težav:', err));
