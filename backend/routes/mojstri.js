@@ -1,25 +1,31 @@
+// Modul za upravljanje mojstrov (obrtnikov)
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2');
+const { Pool } = require('pg');
 require('dotenv').config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_DATABASE,
+// Povezava s PostgreSQL bazo
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 
+// API pot za pridobitev seznama vseh mojstrov
 router.get('/', (req, res) => {
-  const sql = 'SELECT ime, priimek, gsm, email, strokovnosti FROM uporabniki WHERE tip_racuna = "mojster"';
-  db.query(sql, (err, result) => {
+  // Poišči vse uporabnike s tipom računa 'mojster'
+  const sql = 'SELECT ime, priimek, gsm, email, strokovnosti FROM uporabniki WHERE tip_racuna = $1';
+  db.query(sql, ['mojster'], (err, result) => {
     if (err) {
-      console.error('Napaka pri poizvedbi za mojstre:', err);
+      console.error('Napaka pri iskanju mojstrov v bazi:', err);
       return res.status(500).json({ error: 'Napaka pri pridobivanju mojstrov' });
     }
-    res.json(result);
+    // Vrnemo seznam mojstrov
+    res.json(result.rows);
   });
 });
 
+// Izvozimo router za uporabo v glavni aplikaciji
 module.exports = router;

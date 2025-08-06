@@ -8,8 +8,18 @@ function SeznamTezav() {
   useEffect(() => {
     fetch(`${config.API_BASE_URL}/api/tezave/vse`)
       .then((res) => res.json())
-      .then((data) => setTezave(data))
-      .catch((err) => console.error('Napaka pri pridobivanju težav:', err));
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setTezave(data);
+        } else {
+          console.error('API returned non-array data:', data);
+          setTezave([]);
+        }
+      })
+      .catch((err) => {
+        console.error('Napaka pri pridobivanju težav:', err);
+        setTezave([]);
+      });
   }, []);
 
   return (

@@ -1,15 +1,19 @@
+// Domača stran aplikacije HandyMate
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Domov() {
+  // Preverjamo, ali je uporabnik prijavljen (podatki v localStorage)
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
 
+  // Funkcija za odjavo uporabnika
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    navigate('/');
+    localStorage.removeItem('user'); // Odstranimo podatke iz localStorage
+    navigate('/'); // Preusmerimo na domačo stran
   };
 
+  // Če je uporabnik prijavljen, prikažemo pozdravno sporočilo
   if (user) {
     return (
       <div>
@@ -20,6 +24,7 @@ function Domov() {
     );
   }
 
+  // Če uporabnik ni prijavljen, prikažemo registracijske možnosti
   return (
     <div>
       <h2>Dobrodošli v aplikaciji HandyMate</h2>
@@ -30,4 +35,5 @@ function Domov() {
   );
 }
 
+// Izvozimo komponento
 export default Domov;
